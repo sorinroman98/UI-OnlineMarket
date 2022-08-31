@@ -1,0 +1,83 @@
+ <!-- <div class='card'>
+    <div class='card-header'>
+   
+    </div>
+    <div class='card-body'>
+      <div class='row'>
+        <div class='col-md-2'>Filter by:</div>
+        <div class='col-md-4'>
+         <input type='text' [(ngModel)]='listFilter'/>
+        </div>
+        
+      </div>
+
+      <div class='table-responsive'>
+        <table class='table'>
+          <thead>
+            <tr>
+              <th> Order ID </th>
+              <th>Customer Name</th>
+              <th>Total Price</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor='let order of filteredOrders'>
+              <td> <a [routerLink]="['/orders/detail', order.orderId]">  {{order.orderId}}</a> </td>
+              <td> {{order.customerName}} </td>
+              <td>{{order.totalAmount | currency:'USD':'symbol':'1.2-2' }}</td>
+              <td>{{order.localDateTime | convertToSpaces: 'T'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+    </div>
+  
+  </div>  -->
+
+  <div class="container mt-5">
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-10">
+            <div class="rounded">
+                <div class="table-responsive table-borderless">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <div class="toggle-btn">
+                                        <div class="inner-circle"></div>
+                                    </div>
+                                </th>
+                                <th>Order #</th>
+                                <th>Customer name</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Created</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-body">
+
+                            <tr class="cell-1" *ngFor='let order of filteredOrders'>
+                                <td class="text-center">
+                                    <div class="toggle-btn">
+                                        <div class="inner-circle"></div>
+                                    </div>
+                                </td>
+                               
+                                <td>{{order.orderId}}</td>
+                                <td>{{order.customerName}}</td>
+                                
+                                <td [ngClass]="order['paid'] ? 'table-success' : 'table-danger'"><span>{{order['paid'] ? 'Paid!' : 'Unpaid!'}}</span></td>
+                                <td>{{order.totalAmount | currency:'USD':'symbol':'1.2-2' }}</td>
+                                <td>{{order.localDateTime | convertToSpaces: 'T'}}</td>
+                                <td><i class="fa fa-ellipsis-h text-black-50" [routerLink]="['/orders/detail', order.orderId]"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

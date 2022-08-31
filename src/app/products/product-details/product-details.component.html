@@ -1,0 +1,28 @@
+<div class="container d-flex justify-content-center">
+  <figure class="card card-product-grid"> <a href="#" class="img-wrap" data-abc="true"> <img src="https://i.imgur.com/MPqUt62.jpg"> </a>
+      <figcaption class="info-wrap">
+          <div class="row">
+              <div class="col-md-9 col-xs-9"> <span class="rated"> {{product.category}}</span>  {{product.productName}} </div>
+              <div class="col-md-3 col-xs-3">
+                  <div class="rating text-right"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <span class="rated">Rated 4.0/5</span> </div>
+                  <pm-star> </pm-star>
+              </div>
+          </div>
+      </figcaption>
+      <div class="bottom-wrap-payment">
+          <figcaption class="info-wrap">
+              <div class="row">
+                  <div class="col-md-9 col-xs-9"> <a href="#" class="title" data-abc="true">{{product.price | currency:'USD':'symbol':'1.2-2'}}</a> <span class="rated"> VISA Platinum</span> </div>
+                  <div class="col-md-3 col-xs-3">
+                      <div class="rating text-right"> {{onStock ? 'On stock' : 'Out of Stock'}}  </div>
+                  </div>
+              </div>
+          </figcaption>
+      </div>
+           <div class="bottom-wrap" > <a *ngIf= "this.onStock" class="btn btn-primary float-right" data-abc="true"> Buy now </a>
+          <div class="price-wrap"> <a   (click)='onBack()' class="btn btn-warning float-left" data-abc="true"> Cancel </a> </div>
+          <div class="price-wrap"> <a *ngIf="this.isAdmin" class="btn btn-warning float-left" data-abc="true"> Edit </a> 
+          <a  *ngIf= "this.onStock" (click)='addToTheCart()' class="btn btn-warning pull-right" data-abc="true"> Add To Cart </a></div>
+        </div>
+  </figure>
+</div>

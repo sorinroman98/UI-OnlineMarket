@@ -1,0 +1,345 @@
+<div *ngIf="!isAdmin;then admin_content else user_content">here is ignored</div>
+<ng-template #admin_content>
+  <div class='card'>
+    <div class='card-header'>
+      {{pageTitle}}
+    </div>
+    <div class='card-body'>
+      <div class='row'>
+        <div class='col-md-2'>Filter by:</div>
+        <div class='col-md-4'>
+          <input type='text' [(ngModel)]='listFilter' />
+        </div>
+        <div class="col-md-6">
+          <button class='btn btn-primary pull-right ' *ngIf="this.isAdmin" data-toggle="modal"
+            data-target="#addNewProductModal">
+            Add Product
+          </button>
+        </div>
+
+      </div>
+
+      <div class='table-responsive'>
+        <table class='table'>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Subcategory</th>
+              <th>Name</th>
+              <th>Code</th>
+              <th>Price</th>
+              <th>Description</th>
+              <th>Quantity</th>
+              <td>Edit</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor='let product of filteredProducts'>
+              <td>{{product.category}}</td>
+              <td>{{product.subcategory}}</td>
+              <td> {{ product.productName }}</td>
+              <td>{{ product.model}}</td>
+              <td>{{ product.price | currency: product.currency :'symbol':'1.2-2'}}</td>
+              <td>{{ product.description}}</td>
+              <td>{{ product.quantity}}</td>
+              <td><i class="fa fa-ellipsis-h text-black-50" (click)="onEditProduct(product)"></i></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #user_content>
+  <section class="section-products">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-md-8 col-lg-6">
+          <div class="header">
+            <h2>Products List</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8 col-lg-4 col-xl-4" *ngFor='let product of filteredProducts'>
+          <div id="product-1" class="single-product">
+            <div class="part-1" [ngStyle]="{'background-image':'url(' + product?.imageUrl + ')', 'background-size': 'cover',
+           'transition': 'all 0.3s'}">
+              <ul>
+                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                <li><a href="#"><i class="fa fa-plus"></i></a></li>
+                <li><a (click)="onInfoClick(product)"><i class="fa fa-expand"></i></a></li>
+              </ul>
+            </div>
+            <div class="part-2">
+              <h3 class="product-title">{{ product.productName }}</h3>
+              <h4 class="product-price">{{ product.price | currency:'USD':'symbol':'1.2-2'}}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</ng-template>
+
+<button [hidden]="true" type="button" id="editPorduct" data-toggle="modal" data-target="#editProductModal"></button>
+<button [hidden]="true" type="button" id="infoProduct" data-toggle="modal" data-target="#infoProductModal"></button>
+
+<div class="modal fade bd-example-modal-lg" id="addNewProductModal" tabindex="-1" role="dialog" aria-labelledby=""
+  aria-hidden="true">
+
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title text-center">Add New Product</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div>
+          <form #addNewProductForm="ngForm" (ngSubmit)="addNewProduct(addNewProductForm)">
+            <div class="form-group">
+              <label>Category</label>
+              <input type="text" class="form-control" name="category" name="category" placeholder="Category"
+                [(ngModel)]="newProduct.category">
+            </div>
+            <div class="form-group">
+              <label>Subcategory</label>
+              <input type="text" class="form-control" name="subcategory" name="subcategory" placeholder="Subcategory"
+                [(ngModel)]="newProduct.subcategory">
+            </div>
+            <div class="form-group">
+              <label>Product Name</label>
+              <input type="text" class="form-control" name="productName" name="productName" placeholder="Product name"
+                [(ngModel)]="newProduct.productName">
+            </div>
+
+            <div class="form-group">
+              <label>Price</label>
+              <input type="number" class="form-control" name="price" name="price" placeholder="Price"
+                [(ngModel)]="newProduct.price" validate>
+            </div>
+
+            <div class="form-group">
+              <label>Currency</label>
+              <input type="text" class="form-control" name="currency" name="currency" placeholder="Currency" value="USD"
+                [(ngModel)]="newProduct.currency">
+            </div>
+
+            <div class="form-group">
+              <label>Discount</label>
+              <input type="number" class="form-control" name="discount" name="discount" placeholder="0" value="0"
+                [(ngModel)]="newProduct.discount">
+            </div>
+
+            <div class="form-group">
+              <label>Likes</label>
+              <input type="number" class="form-control" name="likes_count" name="likes_count" placeholder="0" value="0"
+                [(ngModel)]="newProduct.likes_count">
+            </div>
+
+            <div class="form-group">
+              <label>Model</label>
+              <input type="text" class="form-control" name="model" name="model" placeholder="Model"
+                [(ngModel)]="newProduct.model">
+            </div>
+
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" class="form-control" name="description" name="description" placeholder="Description"
+                [(ngModel)]="newProduct.description">
+            </div>
+
+            <div class="form-group">
+              <label>Image URL</label>
+              <input type="text" class="form-control" name="imageUrl" placeholder="Image url"
+                [(ngModel)]="newProduct.imageUrl">
+            </div>
+
+            <div class="form-group">
+              <label>Quantity</label>
+              <input type="text" class="form-control" name="quantity" placeholder="Quantity"
+                [(ngModel)]="newProduct.quantity">
+            </div>
+            <button type="submit" style="display: none;" id="add-new-product"></button>
+          </form>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add-new-product-close">Close</button>
+        <button type="button" (click)="onSaveProduct()" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby=""
+  aria-hidden="true">
+
+
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center">Edit Existing Product</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form #editProductForm="ngForm" (ngSubmit)="editExistingProduct(editProductForm)">
+          <div class="form-group">
+            <label>Category</label>
+            <input type="text" class="form-control" name="category" [(ngModel)]="editProduct.category">
+          </div>
+          <div class="form-group">
+            <label>Subcategory</label>
+            <input type="text" class="form-control" name="subcategory" [(ngModel)]="editProduct.subcategory">
+          </div>
+          <div class="form-group">
+            <label>Product Name</label>
+            <input type="text" class="form-control" name="productName" [(ngModel)]="editProduct.productName">
+          </div>
+
+          <div class="form-group">
+            <label>Price</label>
+            <input type="number" class="form-control" name="price" [(ngModel)]="editProduct.price" validate>
+          </div>
+
+          <div class="form-group">
+            <label>Currency</label>
+            <input type="text" class="form-control" name="currency" [(ngModel)]="editProduct.currency">
+          </div>
+
+          <div class="form-group">
+            <label>Discount</label>
+            <input type="number" class="form-control" name="discount" [(ngModel)]="editProduct.discount">
+          </div>
+
+          <div class="form-group">
+            <label>Likes</label>
+            <input type="number" class="form-control" name="likes_count" [(ngModel)]="editProduct.likes_count">
+          </div>
+
+          <div class="form-group">
+            <label>Model</label>
+            <input type="text" class="form-control" name="model" [(ngModel)]="editProduct.model">
+          </div>
+
+
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" class="form-control" name="description" [(ngModel)]="editProduct.description">
+          </div>
+
+          <div class="form-group">
+            <label>Image URL</label>
+            <input type="text" class="form-control" name="imageUrl" [(ngModel)]="editProduct.imageUrl">
+          </div>
+
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="text" class="form-control" name="quantity" [(ngModel)]="editProduct.quantity">
+          </div>
+          <button type="submit" style="display: none;" id="edit-existing-product"></button>
+        </form>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="edit-product-close">Close</button>
+
+        <button type="button" (click)="onUpdateProduct()" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Product Info Modal Page -->
+ <div class="modal fade bd-example-modal-xl" id="infoProductModal" tabindex="-1" role="dialog" aria-labelledby=""
+  aria-hidden="true">
+
+
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <!--
+      <div class="container d-flex justify-content-center">
+        <figure class="card card-product-grid">
+          <div class="part-1" [ngStyle]="{'background-image':'url(' + infoProduct?.imageUrl + ')', 'background-size': 'cover',
+          'transition': 'all 0.3s'}">
+          </div>
+            <figcaption class="info-wrap">
+                <div class="row">
+                    <div class="col-md-9 col-xs-9"> <span class="rated"> {{infoProduct.category}}</span>  {{infoProduct.productName}} </div>
+                    <div class="col-md-3 col-xs-3">
+                        <div class="rating text-right"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <span class="rated">Rated 4.0/5</span> </div>
+                        <pm-star> </pm-star>
+                    </div>
+                </div>
+            </figcaption>
+            <div class="bottom-wrap-payment">
+                <figcaption class="info-wrap">
+                    <div class="row">
+                        <div class="col-md-9 col-xs-9"> <a href="#" class="title" data-abc="true">{{infoProduct.price | currency:'USD':'symbol':'1.2-2'}}</a> <span class="rated"> VISA Platinum</span> </div>
+                        <div class="col-md-3 col-xs-3">
+                             <div class="rating text-right"> {{onStock ? 'On stock' : 'Out of Stock'}}  </div> 
+                        </div>
+                    </div>
+                </figcaption>
+            </div>
+                 <div class="bottom-wrap" > <a *ngIf= "this.onStock" class="btn btn-primary float-right" data-abc="true"> Buy now </a>
+                <div class="price-wrap"> <a   (click)='onBack()' class="btn btn-warning float-left" data-abc="true"> Cancel </a> </div>
+                <div class="price-wrap"> <a *ngIf="this.isAdmin" class="btn btn-warning float-left" data-abc="true"> Edit </a> 
+                <a  *ngIf= "this.onStock" (click)='addToTheCart()' class="btn btn-warning pull-right" data-abc="true"> Add To Cart </a></div> 
+              </div>
+        </figure>
+      </div>-->
+
+
+<div class="container mt-12 mb-12">
+  <div class="row d-flex justify-content-center">
+      <div class="col-md-12">
+          <div class="card">
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="images p-3">
+                          <div class="text-center p-4"> <img id="main-image" style="  object-fit: contain;" src={{infoProduct.imageUrl}}  width="350" /> </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="product p-4">
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div class="d-flex align-items-center"> <i class="fa fa-long-arrow-left"></i> <span class="ml-1">Back</span> </div> <i class="fa fa-shopping-cart text-muted"></i>
+                          </div>
+                          <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">{{infoProduct.model}}</span>
+                              <h5 class="text-uppercase">{{infoProduct.productName}}</h5>
+                              <div class="price d-flex flex-row align-items-center"> <span class="act-price">{{infoProduct.price}}  {{infoProduct.currency}} </span>
+                                  <!-- <div class="ml-2"> <small class="dis-price">$59</small> <span>40% OFF</span> </div> -->
+                              </div>
+                          </div>
+                          <p class="about">{{infoProduct.description}}</p>
+                          <div class="sizes mt-5">
+                          <!--need to add in stock or not-->
+                          </div>
+                          <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4">Add to cart</button> <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+</div>
+</div>
+</div>

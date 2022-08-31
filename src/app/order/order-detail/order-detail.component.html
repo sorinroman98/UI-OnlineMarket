@@ -1,0 +1,47 @@
+<div class="container d-flex justify-content-center">
+    <figure class="card card-product-grid">
+        <figcaption class="info-wrap">
+            <div class="row">
+                <div class="col-md-9 col-xs-9"> <span class="rated"> Customer </span> </div>
+                 <div>{{order['customerName']}}</div>
+            </div>
+        </figcaption>
+        <div class="bottom-wrap-payment">
+            <figcaption class="info-wrap">
+                <div class="row">
+                    <div class='table-responsive'>
+                        <table class='table'>
+                          <thead>
+                            <tr>
+                              <th> Product Name </th>
+                              <th>Price</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor='let product of products'>
+                              <td> {{product.productName}} </td>
+                              <td>{{product.price | currency:'USD':'symbol':'1.2-2' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-8 col-xs-8"> <span class="rated"> Total  </span>{{ order.totalAmount | currency:'USD':'symbol':'1.2-2'}}  </div>
+                        <div class="col-md-4 col-xs-4">
+                            <div class="rating text-right"><span class="rated"> Status </span> {{order['paid'] ? 'Paid' : 'Unpaid'}} 
+                                <span class ="dot" [ngClass]="{
+                                'dot-green' : order['paid'] == 1,
+                                'dot-red' : order['paid'] == 0}"></span>  </div>
+                        </div>
+                    </div>
+                </div>
+            </figcaption>
+        </div>
+            <div class="price-wrap"> <a   (click)='onBack()' class="btn btn-warning float-left" data-abc="true"> Back </a> 
+            <a   (click)='onDelete()' class="btn btn-warning pull-right" data-abc="true"> Delete </a> </div>
+
+            <!-- <div class="price-wrap"> <a *ngIf="this.isAdmin" [routerLink]="['/productsSpring/editProduct',product.uuid,product.id]" class="btn btn-warning float-left" data-abc="true"> Edit </a> </div> -->
+  
+          <!-- </div> -->
+    </figure>
+  </div>
