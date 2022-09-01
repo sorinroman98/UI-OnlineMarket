@@ -53,7 +53,7 @@
                                 <th>Customer name</th>
                                 <th>Status</th>
                                 <th>Total</th>
-                                <th>Created</th>
+                                <th>Created at</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -66,10 +66,10 @@
                                     </div>
                                 </td>
                                
-                                <td>{{order.orderId}}</td>
-                                <td>{{order.customerName}}</td>
+                                <td>{{order.orderUuid}}</td>
+                                <td>{{order.userName}}</td>
                                 
-                                <td [ngClass]="order['paid'] ? 'table-success' : 'table-danger'"><span>{{order['paid'] ? 'Paid!' : 'Unpaid!'}}</span></td>
+                                <td [ngClass]="order['paid'] ? 'table-success' : 'table-danger'"><span>{{order.payed ? 'Paid!' : 'Unpaid!'}}</span></td>
                                 <td>{{order.totalAmount | currency:'USD':'symbol':'1.2-2' }}</td>
                                 <td>{{order.localDateTime | convertToSpaces: 'T'}}</td>
                                 <td><i class="fa fa-ellipsis-h text-black-50" [routerLink]="['/orders/detail', order.orderId]"></i></td>

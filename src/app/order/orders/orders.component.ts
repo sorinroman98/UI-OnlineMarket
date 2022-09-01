@@ -41,8 +41,10 @@ export class OrdersComponent {
   }
 
   getOrdersList(){
-    this.subscriptions.push(this.orderService.getAllOrders().subscribe(
+    this.subscriptions.push(
+      this.orderService.getAllOrders().subscribe(
       data => {
+        console.log(data);
         this.orders = data;
         this.filteredOrders = data;
       },

@@ -1,10 +1,12 @@
-import { IProduct } from "./product";
+import { Product } from "./product";
 
-export interface IOrder{
+export class Order{
     id: Int16Array;
-    orderId: String;
-    customerName: String;
+    orderUuid: String;
+    userName: String;
+    userEmail: String;
     localDateTime: any;
     totalAmount: number;
-    products: IProduct[]
+    payed: boolean;
+    products: Product[]
 }

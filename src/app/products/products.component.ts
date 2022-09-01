@@ -58,8 +58,6 @@ export class ProductComponent implements OnInit,OnDestroy {
       data => {
         this.products = data;
         this.filteredProducts = data;
-        console.log(this.filteredProducts)
-
       },
       err => console.log(err),
       () => console.log("Product not loaded")
