@@ -72,7 +72,7 @@
                                 <td [ngClass]="order['paid'] ? 'table-success' : 'table-danger'"><span>{{order.payed ? 'Paid!' : 'Unpaid!'}}</span></td>
                                 <td>{{order.totalAmount | currency:'USD':'symbol':'1.2-2' }}</td>
                                 <td>{{order.localDateTime | convertToSpaces: 'T'}}</td>
-                                <td><i class="fa fa-ellipsis-h text-black-50" [routerLink]="['/orders/detail', order.orderId]"></i></td>
+                                <td><i class="fa fa-ellipsis-h text-black-50" (click)="onInfoClick(order)"></i></td>
                             </tr>
                         </tbody>
                     </table>
@@ -80,4 +80,67 @@
             </div>
         </div>
     </div>
+</div>
+
+<button [hidden]="true" type="button" id="infoOrder" data-toggle="modal" data-target="#infoOrderModal"></button>
+
+<!-- Order Info Modal -->
+<div class="modal fade bd-example-modal-xl" id="infoOrderModal" tabindex="-1" role="dialog" aria-labelledby=""
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="container d-flex justify-content-center">
+        <figure class="card card-product-grid">
+          <figcaption class="info-wrap">
+            <div class="row">
+              <div class="col-md-9 col-xs-9"> <span class="rated"> Customer </span> </div>
+              <div>{{currentOrder.userName }}</div>
+            </div>
+          </figcaption>
+          <div class="bottom-wrap-payment">
+            <figcaption class="info-wrap">
+              <div class="row">
+                <div class='table-responsive'>
+                  <table class='table'>
+                    <thead>
+                      <tr>
+                        <th> Product Name </th>
+                        <th>Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor='let product of currentOrder.products'>
+                        <td> {{product.productName}} </td>
+                        <td>{{product.price | currency:'USD':'symbol':'1.2-2' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row">
+                  <div class="col-md-8 col-xs-8"> <span class="rated"> Total </span>{{ currentOrder.totalAmount |
+                    currency:'USD':'symbol':'1.2-2'}} </div>
+                  <div class="col-md-4 col-xs-4">
+                    <div class="rating text-right"><span class="rated"> Status </span> {{currentOrder.payed ? 'Paid' : 'Unpaid'}}
+                      <span class="dot" [ngClass]="{
+                                      'dot-green' : currentOrder.payed == true,
+                                      'dot-red' : currentOrder.payed == false}"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </figcaption>
+          </div>
+          <div class="price-wrap"> 
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="info-order-close">Close</button>
+            <a (click)='onDelete()' class="btn btn-warning pull-right" data-abc="true"> Delete </a>
+          </div>
+      
+        </figure>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+    </div>
+
+  </div>
 </div>

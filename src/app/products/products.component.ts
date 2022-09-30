@@ -20,7 +20,6 @@ export class ProductComponent implements OnInit,OnDestroy {
   public newProduct = new Product();
   public infoProduct = new Product();
   private _listFilter: string = '';
-  private sub: any;
   pageTitle: string;
   filteredProducts: any = [];
   isAdmin!: boolean;
@@ -58,6 +57,8 @@ export class ProductComponent implements OnInit,OnDestroy {
       data => {
         this.products = data;
         this.filteredProducts = data;
+        this.sendNotification( NotificationType.INFO,"Number of products loaded " +this.products.length );
+
       },
       err => console.log(err),
       () => console.log("Product not loaded")

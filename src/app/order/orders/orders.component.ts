@@ -1,5 +1,11 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { Subscription } from "rxjs/internal/Subscription";
+import { NotificationType } from "src/app/enum/notification-type.enum";
+import { CustomHttpResponse } from "src/app/model/custom-http-response";
+import { Order } from "src/app/model/order";
+import { Product } from "src/app/model/product";
+import { NotificationService } from "src/app/service/notification.service";
 import { OrderService } from "src/app/service/order.service";
 import { UserService } from "src/app/service/user.service";
 
@@ -12,12 +18,14 @@ import { UserService } from "src/app/service/user.service";
 export class OrdersComponent {
 
   public orders: any;
+  public currentOrder = new Order();
   private _listFilter: string = '';
   public filteredOrders: any = [];
   private subscriptions: Subscription[] = [];;
   errorMessage?: string;
 
-  constructor(private orderService: OrderService, private userService: UserService) {
+  constructor(private orderService: OrderService, private userService: UserService,
+    private notifier: NotificationService) {
    }
 
    ngOnInit(): void {
@@ -57,11 +65,41 @@ export class OrdersComponent {
     ));
   }
 
+  onInfoClick(order: Order){
+    this.currentOrder = order;
+    this.clickButton("infoOrder");
+  }
+
+  private clickButton(buttonId: string): void {
+    document.getElementById(buttonId).click();
+  }
+
+  onDelete(){
+    this.subscriptions.push(
+      this.orderService.deleteOrderByUuid(this.currentOrder.orderUuid).subscribe(
+        (response: CustomHttpResponse) => {
+          this.sendNotification(NotificationType.SUCCESS, response.message);
+          this.clickButton("info-order-close");
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+          this.clickButton("info-order-close");
+        }
+      ))
+
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  
+  private sendNotification(notificationType: NotificationType, message: string): void {
+    if (message) {
+      this.notifier.notify(notificationType, message);
+    } else {
+      this.notifier.notify(notificationType, "An error occured. Please try again");
+    }
+  }
 
   
 }
